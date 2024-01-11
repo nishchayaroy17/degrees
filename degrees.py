@@ -61,6 +61,7 @@ def main():
     print("Loading data...")
     load_data(directory)
     print("Data loaded.")
+    # print(people)
 
     source = person_id_for_name(input("Name: "))
     if source is None:
@@ -93,8 +94,34 @@ def shortest_path(source, target):
     """
 
     # TODO
-    raise NotImplementedError
-
+    start=Node(source,None,None)
+    # goal=Node(target,None,None)
+    frontier=QueueFrontier()
+    frontier.add(start)
+    path=[]
+    explored=set()
+    while not frontier.empty():
+        node=frontier.remove()
+        explored.add(node.state)
+        # print("Removed node: ",str(node))
+        if (node.state==target):
+            while node.parent!=None:
+                # print("...............")
+                path.append(node.action)
+                node=node.parent
+            path.reverse()
+            # print("Path ",path)
+            return path
+        else:
+            actions=neighbors_for_person(node.state)
+            # print("Actions")
+            for action in actions:
+                if action[1] not in explored:
+                    # print(action)
+                    child=Node(action[1],node,action)
+                    frontier.add(child)
+    return None
+    # raise NotImplementedError
 
 def person_id_for_name(name):
     """
